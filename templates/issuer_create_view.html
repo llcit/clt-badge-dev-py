@@ -1,0 +1,49 @@
+<!-- create_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+<!-- ROW 1 -->
+	<div class="row">
+		<div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
+
+		<div class="col-md-8" style="padding: 10px">
+			<div class="lead" style="background-color: #E6E6E6">Existing Issuers </div>
+
+			{% for i in current_objects %}
+			<p>
+				<a class="btn btn-default lead" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">
+					{{ i.name }} <strong>{{ i.initials }}</strong> <i class="fa fa-caret-right"></i>
+				</a>
+				<ul id="detail_{{ i.id }}" class="list-group list-group-success collapse">
+					<li class="list-group-item">
+                        <a class="btn btn-xs btn-primary" href="{% url 'edit_issuer' i.id %}">Edit</a>
+                    </li>
+                    <li class="list-group-item"><img width="120px" src="{{ i.image }}"/></li>
+
+					<li class="list-group-item"><strong>url: </strong> <a href="{{ i.url }}" target="_blank">{{ i.url }}</a></li>
+					<li class="list-group-item"><strong>document root: </strong> {{ i.doc_path }}</li>
+					<li class="list-group-item"><strong>contact: </strong> {{ i.contact }}</li>
+					<li class="list-group-item"><strong>assertion: </strong><a href="{{ i.jsonfile }}"
+					 target="_blank">{{ i.jsonfile }}</a></li>
+
+				</ul>
+			</p>
+			{% endfor %}
+		</div>
+
+		<div class="col-md-4" style="padding: 10px">
+			<div class="lead" style="background-color: #E6E6E6">Create Issuer <small>(this is probably unecessary)</small></div>
+			<div class="well" style="background: white">
+				<form method="post">{% csrf_token %}
+					{{ form|crispy }}
+					<button  class="btn btn-lg btn-success" type="submit">Add Issuer</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock content_container %}

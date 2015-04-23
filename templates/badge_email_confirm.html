@@ -1,0 +1,8 @@
+<!-- badge_email_confirm.html -->
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block content_container %}
+    Email was sent to {{ award.firstname }} {{ award.lastname }} at {{ award.email }}. <a href="{% url 'create_award_by_badge' award.badge.id %}">Back to awards.</a>
+{% endblock content_container %}

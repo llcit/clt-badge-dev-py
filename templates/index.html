@@ -1,0 +1,54 @@
+<!-- index.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block content_container %}
+<!-- ROW 1 -->
+    <div class="row block-center">
+        <div class="col-md-12 text-center">
+            <div class="lead text-center">CLT Badges</div>
+        </div>
+
+        <div class="col-md-12">
+            {% for i in issuer_list %}
+                <div class="row well">
+
+                    <div class="col-md-3">
+                        <h2></h2>
+                        <p><span class="lead">{{ i.name }}</span></p>
+
+                        <p>
+                            <ul class="list-group">
+                                <li class="list-group-item list-group-item-success"><img width="120px" src="{{ i.image }}"/></li>
+                                <li class="list-group-item list-group-item-success"><strong>description: </strong>{{ i.desc }} </li>
+                                <li class="list-group-item list-group-item-success"><strong>url: </strong><a href="{{ i.url }}" target="_blank">{{ i.url }}</a></li>
+                                <li class="list-group-item list-group-item-success"><strong>contact: </strong>{{ i.contact }}</li>
+                            </ul>
+                        </p>
+
+                    </div>
+
+                    <div class="col-md-9">
+                        {% for j in i.badges.all %}
+                        <div class="col-md-4">
+                            <p class="lead">{{ j.name }}</p>
+                            <p class="clearfix">
+                                <ul class="list-group">
+                                    <li class="list-group-item list-group-item-primary"><img width="120px" src="{{ j.image }}"/></li>
+                                    <li class="list-group-item list-group-item-primary"><strong>description:</strong> {{ j.description }}</li>
+                                    <li class="list-group-item list-group-item-primary"><strong>criteria: </strong> <a href="{{ j.criteria }}" target="_blank">{{ j.criteria }}</a></li>
+                                    <li class="list-group-item list-group-item-primary"><strong>created: </strong> {{ j.created }}</li>
+                                </ul>
+                            </p>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+{% endblock content_container %}

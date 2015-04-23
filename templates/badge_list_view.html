@@ -1,0 +1,22 @@
+<!-- list_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+
+<!-- ROW 1 -->
+	<div class="row">
+		<div class="col-md-12 block-center">
+			<div class="lead">{% if obj_filter %} {{ obj_filter }} {% else %} All {% endif %} {{ object_type }}s </div>
+			<div class="col-md-6">
+			{% for i in object_list %}
+				<div>{{ i }}</div>
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+
+{% endblock content_container %}

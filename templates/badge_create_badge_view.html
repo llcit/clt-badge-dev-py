@@ -1,0 +1,49 @@
+<!-- create_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+<!-- ROW 1 -->
+	<div class="row">
+		<div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
+
+		<div class="col-md-8" style="padding: 10px">
+			<div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing {{ object_type }}s </div>
+
+			{% for i in current_objects %}
+			<p>
+				<a class="btn btn-default lead" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">
+					{{ i.name }} <i class="fa fa-caret-right"></i>
+				</a>
+				<ul id="detail_{{ i.id }}" class="list-group list-group-success collapse">
+					<li class="list-group-item">
+						<a class="btn btn-xs btn-primary" href="{% url 'edit_badge' i.id %}">Edit</a>
+					</li>
+					<li class="list-group-item list-group-item-success"><img width="120px" src="{{ i.image }}"/></li>
+					<li class="list-group-item list-group-item-success"><strong>description:</strong> {{ i.description }}</li>
+					<li class="list-group-item list-group-item-success"><strong>criteria: </strong> <a href="{{ i.criteria }}" target="_blank">{{ i.criteria }}</a></li>
+					<li class="list-group-item list-group-item-success"><strong>created: </strong> {{ j.created }}</li>
+					<li class="list-group-item list-group-item-success"><strong>assertion: </strong><a href="{{ i.jsonfile }}" target="_blank">{{ i.jsonfile }}</a></li>
+				</ul>
+			</p>
+			{% endfor %}
+
+		</div>
+
+
+
+		<div class="col-md-4" style="padding: 10px">
+			<div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Create {{ object_type }}</div>
+			<div class="well" style="background: white">
+				<form method="post">{% csrf_token %}
+					{{ form|crispy }}
+					<button class="btn btn-lg btn-success" type="submit">Add {{ object_type }}</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock content_container %}

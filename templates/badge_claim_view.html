@@ -1,0 +1,90 @@
+<!-- claim_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+
+<!-- ROW 1 -->
+<div class="row">
+	<div class="col-md-12 block-center lead"></div>
+
+	<div class="col-md-12 block-center">
+
+	{% if form %}
+
+	<div class="row">
+		<div class="col-md-6 col-md-offset-3">
+			<form method="post">{% csrf_token %}
+				{{ form|crispy }}
+				<button type="submit">Submit claim code</button>
+			</form>
+		</div>
+	</div>
+
+	{% else %}
+
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<p class="lead text-center">Congratulations {{ award.firstname }} {{ award.lastname }}!</p>
+				<p class="lead text-center">The <a href="{{ award.badge.issuer.url }}">{{ award.badge.issuer.name }}</a> at the University of Hawaiʻi at Mānoa is proud to issue you the following digitial badge:</p>
+				<p class="text-center">
+					<img width="200px" src="{{ award.badge.image }}">
+					<h1 class="text-center">{{ award.badge.name }}</h1>
+					<h4 class="text-center">This badge was awarded on <strong>{{ award.issuedOn|date:'M d, Y' }}</strong> based on your work demonstrated here:</h4>
+					<h4 class="text-center"><a href="{{ award.evidence }}" target="_blank">{{ award.evidence }} <i class="fa fa-external-link"></i></a></h4>
+				</p>
+				<p></p>
+				<p class="lead text-center">Still not sure why you were awarded this badge? Visit <a href="{{ award.badge.criteria }}" target="_blank">this page <i class="fa fa-external-link"></i></a> to learn more about it and how you earned it.</p>
+
+
+			</div>
+
+
+			<div class="col-md-6 col-md-offset-3">
+				<h1 class="lead text-center"><strong>NEXT Step?</strong></h1>
+				<ul class="list-group">
+					<li class="list-group-item list-group-item-success">1. Download your badge by clicking the download button below (This will save your special badge image to your computer).</li>
+					<li class="list-group-item list-group-item-success">2. Once downloaded, you can display your badge wherever you like. We recommend using <a href="http://backpack.openbadges.org/" target="_blank">Mozilla Backpack</a> <i class="fa fa-external-link"></i> to store and display badges.</li>
+				</ul>
+				<div class="well" style="background-color: #FFC266"><strong>Important:</strong> If you do use Mozilla Backpack, you will need to use an account with an email address that <em>MATCHES</em> the email address we issued with your badge:
+
+					<h3 class="text-center"><strong>{{ award.email }}</strong></h3>
+
+				If you would like us to change this email address in your badge, please email us at <a mailto="{{award.badge.issuer.contact}}">{{award.badge.issuer.contact}}</div>
+
+
+
+				<h1 class="text-center"><a id="downloader" href="http://backpack.openbadges.org/baker?assertion={{award.getAssertionUrl}}"><i class="fa fa-download fa-5x"></i></a></h1>
+
+				<h1 id="download_done" class="text-center collapse">Your badge has been downloaded to your computer.</h1>
+
+			</div>
+
+			<div class="col-md-12">
+				<hr>
+				<h1 class="lead text-center"><strong>What can you do with your badge?</strong> Visit <a href="http://backpack.openbadges.org/" target="_blank">Mozilla Backpack</a> for tips on how to display your badge.</p>
+				<p style="text-align: center">Questions about our badge? <a mailto="{{award.badge.issuer.contact}}">{{award.badge.issuer.contact}}</a></p>
+				<p style="text-align: center">Technical questions about this site or other issue? <a mailto="llcit@hawaii.edu">llcit@hawaii.edu</a></p>
+			</div>
+		</div>
+
+	{% endif %}
+
+	</div>
+</div>
+
+{% endblock content_container %}
+
+{% block js_script %}
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $("#downloader").click(function(){
+	        $("#downloader").css("display", "none");
+	        $("#download_done").css("display", "inline-block");
+	    });
+	});
+</script>
+{% endblock js_script %}

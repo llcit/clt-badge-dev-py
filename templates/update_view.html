@@ -1,0 +1,22 @@
+<!-- update_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+<!-- ROW 1 -->
+	<div class="row">
+		<div class="col-md-12 block-center">
+			<div class="lead text-center">Update {{ object_type }}</div>
+			<div>
+				<form method="post" action=".">{% csrf_token %}
+					{{ form|crispy }}
+					<button type="submit">Update {{ object_type }}</button>
+				</form>
+			</div>
+		</div>
+	</div>
+
+{% endblock content_container %}
