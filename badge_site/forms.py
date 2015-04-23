@@ -13,7 +13,7 @@ class CreateIssuerForm(ModelForm):
 class CreateBadgeForm(ModelForm):
     class Meta:
         model = Badge
-        fields = ['name', 'image', 'description', 'criteria', 'issuer']
+        fields = ['name', 'image', 'description', 'criteria', 'issuer', 'notify_email_subject']
 
 
 class CreateAwardForm(ModelForm):

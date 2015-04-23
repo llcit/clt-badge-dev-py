@@ -164,7 +164,7 @@ class BadgeUpdateView(StaffuserRequiredMixin, ClassNameMixin, UpdateView):
     template_name = 'badge_update_view.html'
     class_name = 'Badge'
     fields = ['name', 'image', 'description', 'criteria',
-              'issuer']
+              'issuer', 'notify_email_subject']
 
     def get_success_url(self):
         return reverse_lazy('create_badge_by_issuer', args=[self.get_object().issuer.id])
