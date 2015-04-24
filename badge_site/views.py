@@ -21,7 +21,6 @@ class HomeView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['issuer_list'] = Issuer.objects.all()
-        context['badge_list'] = Badge.objects.all().order_by('created')
         return context
 
 class IndexView(StaffuserRequiredMixin, TemplateView):
@@ -29,8 +28,18 @@ class IndexView(StaffuserRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
-        context['issuer_list'] = Issuer.objects.all()
-        context['badge_list'] = Badge.objects.all().order_by('created')
+        issuer_list = []
+        issuers = Issuer.objects.all()
+        years = set()
+        for i in issuers:
+            badges = []
+            for j in i.badges.all().order_by('-created'):
+                badges.append(j)
+                years.add(j.created.strftime('%Y'))
+            issuer_list.append({'issuer': i, 'badges': badges})
+
+        context['issuer_list'] = issuer_list
+        context['year_list'] = list(years)
         return context
 
 

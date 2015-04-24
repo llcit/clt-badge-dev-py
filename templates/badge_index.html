@@ -13,27 +13,27 @@
 
 		<div class="col-md-12">
 
-			<h3><a class="btn btn-lg btn-default" href="{% url 'create_issuer' %}" data-toggle="tooltip" data-placement="right" title="You probably don't need to add more than one issuer.">+ Create a new Issuer</a></h3>
+
 
 			{% for i in issuer_list %}
-				<div class="row well">
+				<div class="row">
 
 					<div class="col-md-3">
 						<h2>Issuing Organization</h2>
-						<p><span class="lead">{{ i.name }}</span></p>
+						<p><span class="lead">{{ i.issuer.name }}</span></p>
 						<p>
-							<a class="btn btn-xs btn-default" href="{% url 'edit_issuer' i.id %}">Edit</a>
+							<a class="btn btn-xs btn-default" href="{% url 'edit_issuer' i.issuer.id %}">Edit</a>
 							<!-- <a class="btn btn-xs btn-danger" href="">Delete</a> -->
-							<a class="btn btn-xs btn-success" href="{% url 'create_badge_by_issuer' issuer=i.id %}">+ Badge</a>
+							<a class="btn btn-xs btn-success" href="{% url 'create_badge_by_issuer' issuer=i.issuer.id %}">+ Badge</a>
 						</p>
 						<p>
 							<ul class="list-group">
-								<li class="list-group-item list-group-item-success"><img width="120px" src="{{ i.image }}"/></li>
-								<li class="list-group-item list-group-item-success"><strong>description: </strong>{{ i.desc }} </li>
-								<li class="list-group-item list-group-item-success"><strong>url: </strong><a href="{{ i.url }}" target="_blank">{{ i.url }}</a></li>
-								<li class="list-group-item list-group-item-success"><strong>document root: </strong>{{ i.doc_path }} </li>
-								<li class="list-group-item list-group-item-success"><strong>contact: </strong>{{ i.contact }}</li>
-								<li class="list-group-item list-group-item-success"><strong>assertion: </strong><a href="{{ i.jsonfile }}" target="_blank">{{ i.jsonfile }}</a></li>
+								<li class="list-group-item list-group-item-success"><img width="120px" src="{{ i.issuer.image }}"/></li>
+								<li class="list-group-item list-group-item-success"><strong>description: </strong>{{ i.issuer.desc }} </li>
+								<li class="list-group-item list-group-item-success"><strong>url: </strong><a href="{{ i.issuer.url }}" target="_blank">{{ i.issuer.url }}</a></li>
+								<li class="list-group-item list-group-item-success"><strong>document root: </strong>{{ i.issuer.doc_path }} </li>
+								<li class="list-group-item list-group-item-success"><strong>contact: </strong>{{ i.issuer.contact }}</li>
+								<li class="list-group-item list-group-item-success"><strong>assertion: </strong><a href="{{ i.issuer.jsonfile }}" target="_blank">{{ i.issuer.jsonfile }}</a></li>
 							</ul>
                         </p>
 
@@ -41,25 +41,38 @@
 
 					<div class="col-md-9">
 						<h2>Badges</h2>
+                        <div class="row"><div class="col-md-12">
+                            {% for i in year_list %}
+                                <a href="#year{{i}}" class="btn btn-sm btn-default">{{ i }}</a>
+                            {% endfor %}
+                        </div></div>
 
-						{% for j in i.badges.all %}
-						<div class="col-md-4">
-							<p class="lead">{{ j.name }} <a class="btn btn-xs btn-default" href="{% url 'edit_badge' j.id %}">Edit</a> <!-- <a class="btn btn-xs btn-danger" href="">Delete</a> --></p>
-							<p>
-								<a class="btn btn-sm btn-success btn-block" href="{% url 'create_award_by_badge' badge=j.id %}"><i class="fa fa-trophy fa-2x"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-user fa-2x"></i></a>
-							</p>
-							<p class="clearfix">
-								<ul class="list-group">
-									<li class="list-group-item list-group-item-primary"><img width="120px" src="{{ j.image }}"/></li>
-									<li class="list-group-item list-group-item-primary"><strong>description:</strong> {{ j.description }}</li>
-									<li class="list-group-item list-group-item-primary"><strong>criteria: </strong> <a href="{{ j.criteria }}" target="_blank">{{ j.criteria }}</a></li>
-									<li class="list-group-item list-group-item-primary"><strong>created: </strong> {{ j.created }}</li>
-									<li class="list-group-item list-group-item-primary"><strong>assertion: </strong><a href="{{ j.jsonfile }}" target="_blank">{{ j.jsonfile }}</a></li>
-								</ul>
-							</p>
+                        <div class="row">
+                        {% for j in i.badges %}
+                            {% ifchanged j.created|date:"Y" %}
+                                <div style="padding-top: 0px" class="col-md-12 clearfix">
+                                    <h2 id="year{{j.created|date:"Y"}}" class="lead">{{j.created|date:"Y"}}</h2>
+                                </div>
+                            {% endifchanged %}
+                            <div class="col-md-4">
+                                <p class="lead">{{ j.name }} <a class="btn btn-xs btn-default" href="{% url 'edit_badge' j.id %}">Edit</a> <!-- <a class="btn btn-xs btn-danger" href="">Delete</a> --></p>
+                                <p>
+                                    <a class="btn btn-sm btn-success btn-block" href="{% url 'create_award_by_badge' badge=j.id %}"><i class="fa fa-trophy fa-2x"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-user fa-2x"></i></a>
+                                </p>
+                                <p class="clearfix">
+                                    <ul class="list-group">
+                                        <li class="list-group-item list-group-item-primary"><img width="120px" src="{{ j.image }}"/></li>
+                                        <li class="list-group-item list-group-item-primary"><strong>description:</strong> {{ j.description }}</li>
+                                        <li class="list-group-item list-group-item-primary"><strong>criteria: </strong> <a href="{{ j.criteria }}" target="_blank">{{ j.criteria }}</a></li>
+                                        <li class="list-group-item list-group-item-primary"><strong>created: </strong> {{ j.created }}</li>
+                                        <li class="list-group-item list-group-item-primary"><strong>assertion: </strong><a href="{{ j.jsonfile }}" target="_blank">{{ j.jsonfile }}</a></li>
 
-						</div>
-						{% endfor %}
+                                    </ul>
+                                </p>
+
+                            </div>
+                        {% endfor %}
+                        </div>
 
 					</div>
 				</div>

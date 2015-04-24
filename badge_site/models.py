@@ -136,6 +136,8 @@ class Badge(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        ordering = ['-created']
 
 class Award(models.Model):
 

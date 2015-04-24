@@ -40,5 +40,6 @@ Thumbs.db
 *-prod.py
 prod-wsgi.py
 prod-*.py
+cltbadgedb
 
 
