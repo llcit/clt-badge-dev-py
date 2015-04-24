@@ -42,37 +42,39 @@
 					<div class="col-md-9">
 						<h2>Badges</h2>
                         <div class="row"><div class="col-md-12">
-                            {% for i in year_list %}
-                                <a href="#year{{i}}" class="btn btn-sm btn-default">{{ i }}</a>
-                            {% endfor %}
+                            {% for i in year_list %}<a href="#year{{i}}" class="btn btn-sm btn-default">{{ i }}</a>{% endfor %}
                         </div></div>
 
-                        <div class="row">
                         {% for j in i.badges %}
-                            {% ifchanged j.created|date:"Y" %}
-                                <div style="padding-top: 0px" class="col-md-12 clearfix">
-                                    <h2 id="year{{j.created|date:"Y"}}" class="lead">{{j.created|date:"Y"}}</h2>
+                            <div class="row">
+                                {% ifchanged j.created|date:"Y" %}
+                                    <div class="col-md-12"><h2 id="year{{j.created|date:"Y"}}" style="background-color: #E6E6E6">{{j.created|date:"Y"}}</h2></div>
+                                {% endifchanged %}
+
+                                <div class="col-md-12">
+                                    <p class="lead">
+                                        <img width="80px" src="{{ j.image }}"/>
+                                        {{ j.name }}
+                                        <a class="btn btn-xs btn-warning" data-toggle="collapse" href="#badgeinfo_{{ j.id }}" aria-expanded="false" aria-controls="badgeinfo_{{ j.id }}">More <i class="fa fa-caret-right"></i></a>
+                                        <a class="btn btn-xs btn-primary" href="{% url 'edit_badge' j.id %}">Edit</a>
+                                        <a class="btn btn-xs btn-success" href="{% url 'create_award_by_badge' badge=j.id %}">
+                                            <i class="fa fa-trophy"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-user"></i>
+                                            Award It!
+                                        </a>
+                                        <!-- <a class="btn btn-xs btn-danger" href="">Delete</a> --></p>
+                                    <p>
+                                        <ul id="badgeinfo_{{ j.id }}" class="list-group collapse">
+                                            <li class="list-group-item list-group-item-primary"><strong>description:</strong> {{ j.description }}</li>
+                                            <li class="list-group-item list-group-item-primary"><strong>criteria: </strong> <a href="{{ j.criteria }}" target="_blank">{{ j.criteria }}</a></li>
+                                            <li class="list-group-item list-group-item-primary"><strong>created: </strong> {{ j.created }}</li>
+                                            <li class="list-group-item list-group-item-primary"><strong>assertion: </strong><a href="{{ j.jsonfile }}" target="_blank">{{ j.jsonfile }}</a></li>
+                                        </ul>
+                                    </p>
+
                                 </div>
-                            {% endifchanged %}
-                            <div class="col-md-4">
-                                <p class="lead">{{ j.name }} <a class="btn btn-xs btn-default" href="{% url 'edit_badge' j.id %}">Edit</a> <!-- <a class="btn btn-xs btn-danger" href="">Delete</a> --></p>
-                                <p>
-                                    <a class="btn btn-sm btn-success btn-block" href="{% url 'create_award_by_badge' badge=j.id %}"><i class="fa fa-trophy fa-2x"></i> <i class="fa fa-arrow-right"></i> <i class="fa fa-user fa-2x"></i></a>
-                                </p>
-                                <p class="clearfix">
-                                    <ul class="list-group">
-                                        <li class="list-group-item list-group-item-primary"><img width="120px" src="{{ j.image }}"/></li>
-                                        <li class="list-group-item list-group-item-primary"><strong>description:</strong> {{ j.description }}</li>
-                                        <li class="list-group-item list-group-item-primary"><strong>criteria: </strong> <a href="{{ j.criteria }}" target="_blank">{{ j.criteria }}</a></li>
-                                        <li class="list-group-item list-group-item-primary"><strong>created: </strong> {{ j.created }}</li>
-                                        <li class="list-group-item list-group-item-primary"><strong>assertion: </strong><a href="{{ j.jsonfile }}" target="_blank">{{ j.jsonfile }}</a></li>
-
-                                    </ul>
-                                </p>
-
                             </div>
                         {% endfor %}
-                        </div>
+
 
 					</div>
 				</div>
