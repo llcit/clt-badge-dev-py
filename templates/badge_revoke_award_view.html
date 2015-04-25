@@ -9,33 +9,33 @@
 <!-- ROW 1 -->
 	<div class="row">
 		<div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
-		
-		<div class="col-md-8" style="padding: 10px">
-			<div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing Revocations </div>
-			
-			{% for i in current_objects %}
-			<p>
-				<span><i class="fa fa-caret-right"></i> </span>
-				<span><strong>Badge: </strong>{{ i.award.badge }} {{ i.award }}</span>
-				<span><strong>Revoked: </strong> {{ i.revoke_date|date:"d M Y" }}</span>
-				<span><a class="btn btn-xs btn-default" href="">Unrevoke</a></span>
-							
-			</p>
-			{% endfor %}
-			
-		</div>
 
-		
-		
-		<div class="col-md-4" style="padding: 10px">
+		<div class="col-md-6 col-md-offset-3" style="padding: 10px">
 			<div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Revoke {{ object_type }}</div>
-			<div class="well" style="background: white">
+			<div class="well">
 				<form method="post">{% csrf_token %}
 					{{ form|crispy }}
-					<button type="submit">Add {{ object_type }}</button>
+					<button class="btn btn-lg btn-danger btn-block" type="submit">Revoke This Award?</button>
 				</form>
 			</div>
 		</div>
+
+
+        <div class="col-md-12" style="padding: 10px">
+            <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing Revocations </div>
+
+            {% for i in current_objects %}
+            <p>
+                <span><i class="fa fa-caret-right"></i> </span>
+                <span><strong>Badge: </strong>{{ i.award.badge }} {{ i.award }}</span>
+                <span><strong>Revoked: </strong> {{ i.revoke_date|date:"d M Y" }}</span>
+                <span><a class="btn btn-xs btn-default" href="{% url 'unrevoke_award' i.id %}">Unrevoke</a></span>
+
+            </p>
+            {% endfor %}
+
+        </div>
+
 	</div>
 
 {% endblock content_container %}

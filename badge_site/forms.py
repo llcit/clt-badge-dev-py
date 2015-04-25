@@ -30,6 +30,13 @@ class RevokeAwardForm(ModelForm):
         # labels = ['award': '']
 
 
+class UnRevokeAwardForm(ModelForm):
+    class Meta:
+        model = Revocation
+        fields = ['issuer', 'award', 'reason']
+        readonly_fields = ['award']
+
+
 
 class ClaimCodeSubmitForm(forms.Form):
     claim_code = forms.CharField(label='Your claim code?', max_length=100)

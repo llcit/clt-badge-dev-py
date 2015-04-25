@@ -1,19 +1,20 @@
 # badge_site/views.py
 import datetime
+from operator import attrgetter
 
-from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView, FormView
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView, FormView, DeleteView
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect
-
-# from django.core.mail import send_mail
+from django.db.models import Count
 from django.core.mail import EmailMultiAlternatives
 
 from braces.views import StaffuserRequiredMixin
 
 from .models import Award, Issuer, Badge, Revocation
-from .forms import CreateIssuerForm, CreateBadgeForm, CreateAwardForm, ClaimCodeSubmitForm, RevokeAwardForm
+from .forms import CreateIssuerForm, CreateBadgeForm, CreateAwardForm, ClaimCodeSubmitForm, RevokeAwardForm, UnRevokeAwardForm
 from .mixins import ClassNameMixin
+
 
 class HomeView(TemplateView):
     template_name = 'index.html'
@@ -22,6 +23,7 @@ class HomeView(TemplateView):
         context = super(HomeView, self).get_context_data(**kwargs)
         context['issuer_list'] = Issuer.objects.all()
         return context
+
 
 class IndexView(StaffuserRequiredMixin, TemplateView):
     template_name = 'badge_index.html'
@@ -36,6 +38,8 @@ class IndexView(StaffuserRequiredMixin, TemplateView):
             for j in i.badges.all().order_by('-created'):
                 badges.append(j)
                 years.add(j.created.strftime('%Y'))
+                print list(years)
+            badges = sorted(badges, key=attrgetter('created'), reverse=True)
             issuer_list.append({'issuer': i, 'badges': badges})
 
         context['issuer_list'] = issuer_list
@@ -90,7 +94,8 @@ class SendAwardNotificationView(StaffuserRequiredMixin, DetailView):
         text_message = 'Hi %s, You have been awarded the -- %s -- badge by the %s. Please visit \r\r %s \r\r to claim your badge!' % (
             award.firstname, award.badge.name, award.badge.issuer.name, claim_url)
 
-        html_message = '<p>Hi %s,</p> <p>You have been awarded the <strong>%s</strong> badge by the %s. Please visit the following link to claim your badge!</p><p><a href="%s">%s</a></p>' % (award.firstname, award.badge.name, award.badge.issuer.name, claim_url, claim_url)
+        html_message = '<p>Hi %s,</p> <p>You have been awarded the <strong>%s</strong> badge by the %s. Please visit the following link to claim your badge!</p><p><a href="%s">%s</a></p>' % (
+            award.firstname, award.badge.name, award.badge.issuer.name, claim_url, claim_url)
 
         text_message += '\r\rSincerely, \rThe %s' % award.badge.issuer.name
         html_message += '<p>Sincerely,</p> <p>The %s</p>' % award.badge.issuer.name
@@ -127,6 +132,7 @@ class IssuerCreateView(StaffuserRequiredMixin, CreateView):
         context = super(IssuerCreateView, self).get_context_data(**kwargs)
         context['current_objects'] = Issuer.objects.all()
         return context
+
 
 class IssuerUpdateView(StaffuserRequiredMixin, ClassNameMixin, UpdateView):
     model = Issuer
@@ -187,7 +193,7 @@ class AwardListView(StaffuserRequiredMixin, ClassNameMixin, ListView):
     def get_queryset(self):
         try:
             badge_id = self.kwargs['pk']
-            self.queryset = Award.objects.filter(badge__id=badge_id)
+            self.queryset = Award.objects.filter(badge__id=badge_id).annotate(revoked=Count('revocation')).order_by('revoked')
         except:
             pass
 
@@ -196,9 +202,10 @@ class AwardListView(StaffuserRequiredMixin, ClassNameMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super(AwardListView, self).get_context_data(**kwargs)
         try:
-            context['obj_filter'] = Badge.objects.get(pk=self.kwargs['pk'])
+            context['badge'] = Badge.objects.get(pk=self.kwargs['pk'])
         except:
             pass
+
         return context
 
 
@@ -238,6 +245,31 @@ class AwardUpdateView(StaffuserRequiredMixin, ClassNameMixin, UpdateView):
         return reverse_lazy('create_award_by_badge', args=[self.get_object().badge.id])
 
 
+class RevokedAwardListView(StaffuserRequiredMixin, ClassNameMixin, ListView):
+    model = Revocation
+    template_name = 'badge_revocation_list_view.html'
+    class_name = 'Award'
+
+    def get_queryset(self):
+        try:
+            badge_id = self.kwargs['badge']
+            self.queryset = Revocation.objects.filter(award__badge__id=badge_id)
+        except:
+            pass
+
+        return super(RevokedAwardListView, self).get_queryset()
+
+    def get_context_data(self, **kwargs):
+        context = super(RevokedAwardListView, self).get_context_data(**kwargs)
+        try:
+            context['badge'] = Badge.objects.get(pk=self.kwargs['badge'])
+        except:
+            pass
+
+        return context
+
+
+
 class RevokeAwardView(StaffuserRequiredMixin, ClassNameMixin, CreateView):
     model = Revocation
     template_name = 'badge_revoke_award_view.html'
@@ -246,7 +278,7 @@ class RevokeAwardView(StaffuserRequiredMixin, ClassNameMixin, CreateView):
     class_name = 'Revocation'
 
     def get_success_url(self):
-        return reverse_lazy('revoke_award', args=[self.award_to_revoke.id])
+        return reverse_lazy('list_awards_by_badge', args=[self.award_to_revoke.badge.id])
 
     def get_initial(self):
         self.award_to_revoke = get_object_or_404(
@@ -265,3 +297,14 @@ class RevokeAwardView(StaffuserRequiredMixin, ClassNameMixin, CreateView):
             'issuer')
         context['parent_object'] = 'Revocation'
         return context
+
+
+class UnRevokeAwardView(StaffuserRequiredMixin, DeleteView):
+    model = Revocation
+    template_name = 'badge_generic_confirm_delete.html'
+    success_url = None
+
+    def get_success_url(self):
+        return reverse_lazy('list_awards_by_badge', args=[self.get_object().award.badge.id])
+
+

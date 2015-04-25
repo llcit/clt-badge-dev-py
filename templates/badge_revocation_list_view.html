@@ -1,0 +1,50 @@
+<!-- badge_revocation_list_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+
+<!-- ROW 1 -->
+<div class="row">
+    <div class="col-md-12 block-center">
+        <div class="lead">
+            {% if badge %}
+                <small><a class="btn btn-xs btn-primary" href="{% url 'list_awards_by_badge' badge.id %}">Award List</a> </small>
+                {{ badge }}
+
+            {% endif %}
+            Awards
+        </div>
+
+        <div class="col-md-6">
+            {% for i in object_list %}
+            <p>
+                <span><i class="fa fa-caret-right"></i> </span>
+                <span>{{ i.award.issuedOn|date:"d M Y" }}</span>
+                <span>
+                    <a class="btn btn-xs btn-default" data-toggle="collapse" href="#detail_{{ i.award.id }}" aria-expanded="false" aria-controls="detail_{{ i.award.id }}">Detail</a>
+                </span>
+
+                <span>{{ i.award.firstname }} {{ i.award.lastname }} <strong>{{ i.award.email }}</strong></span>
+                <ul id="detail_{{ i.award.id }}" class="list-group list-group-success collapse">
+                    <li class="list-group-item"><strong>evidence: </strong> <a href="{{ i.award.evidence }}" target="_blank">{{ i.evidence }}</a></li>
+                    <li class="list-group-item"><strong>issued: </strong> {{ i.award.issuedOn }}</li>
+                    <li class="list-group-item"><strong>issued by: </strong> {{ i.award.creator }}</li>
+                    <li class="list-group-item"><strong>last modified: </strong> {{ i.award.modified }}</li>
+                    <li class="list-group-item"><strong>assertion: </strong><a href="{{ i.award.jsonfile }}"
+                     target="_blank">{{ i.award.jsonfile }}</a></li>
+                    <li class="list-group-item"><strong>claim code: </strong> {{ i.award.claimCode }}</li>
+                    <li class="list-group-item text-right">
+                    <a class="btn btn-xs btn-warning" href="{% url 'unrevoke_award' i.id %}">Reinstate</a>
+                    </li>
+                </ul>
+            </p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content_container %}

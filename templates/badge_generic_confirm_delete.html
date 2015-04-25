@@ -1,0 +1,25 @@
+<!-- badge_generic_confirm_delete.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+<!-- ROW 1 -->
+        <div class="col-md-6 col-md-offset-3" style="padding: 10px">
+            <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Revoke {{ object_type }}</div>
+            <div class="well">
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-lg btn-danger btn-block" type="submit">Are you sure you want to delete "{{ object }}"?</button>
+                </form>
+            </div>
+        </div>
+
+<!-- <form action="" method="post">{% csrf_token %}
+    <p>Are you sure you want to delete "{{ object }}"?</p>
+    <input type="submit" value="Confirm" />
+</form> -->
+
+{% endblock content_container %}

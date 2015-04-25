@@ -10,10 +10,59 @@
 <!-- ROW 1 -->
 	<div class="row">
 		<div class="col-md-12 block-center">
-			<div class="lead">{% if obj_filter %} {{ obj_filter }} {% else %} All {% endif %} {{ object_type }}s </div>
+            <div class="lead">
+                {% if badge %}
+                    {{ badge }}
+                {% endif %}
+                Awards
+            </div>
+            <div>
+                {% if badge %}
+                    {{ object_list|length }} badges awarded (see
+                    <span class="smaller"><a class="" href="{% url 'list_revoked_awards' badge.id %}">revoked awards</a> </span>)
+                {% endif %}
+                <br><br>
+            </div>
+
 			<div class="col-md-6">
 			{% for i in object_list %}
-				<div>{{ i }}</div>
+            <p>
+                <span><i class="fa fa-caret-right"></i> </span>
+
+                <span>{{ i.issuedOn|date:"d M Y" }}</span>
+                <span><a class="btn btn-xs btn-default" href="{% url 'edit_award' i.id %}">Edit</a></span>
+                <span>
+                    {% if not i.notification_status %}
+                        <a class="btn btn-xs btn-success" href="{% url 'send_award_email' i.id %}">Send Email</a>
+                    {% endif %}
+                </span>
+
+                <span>
+                    <a class="btn btn-xs btn-default" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">Detail</a>
+                </span>
+                {% if not i.revoked %}
+                    <span><a class="btn btn-xs btn-danger" href="{% url 'revoke_award' i.id %}">revoke</a></span>
+                {% else %}
+                    <span class="label label-warning">Award revoked</span>
+                {% endif %}
+                <span>{{ i.firstname }} {{ i.lastname }} <strong>{{ i.email }}</strong></span>
+                <ul id="detail_{{ i.id }}" class="list-group list-group-success collapse">
+                    <li class="list-group-item"><strong>evidence: </strong> <a href="{{ i.evidence }}" target="_blank">{{ i.evidence }}</a></li>
+                    <li class="list-group-item"><strong>issued: </strong> {{ i.issuedOn }}</li>
+                    <li class="list-group-item"><strong>issued by: </strong> {{ i.creator }}</li>
+                    <li class="list-group-item"><strong>last modified: </strong> {{ i.modified }}</li>
+                    <li class="list-group-item"><strong>assertion: </strong><a href="{{ i.jsonfile }}"
+                     target="_blank">{{ i.jsonfile }}</a></li>
+                    <li class="list-group-item"><strong>claim code: </strong> {{ i.claimCode }}</li>
+                    <li class="list-group-item"><strong>
+                        notication sent: </strong> {{ i.notification_status }}
+                        <a class="btn btn-xs btn-success" href="{% url 'send_award_email' i.id %}">Send Email</a>
+                    </li>
+                    <li class="list-group-item text-right">
+                        {% comment %}<span class=""><a class="btn btn-xs btn-warning" href="{% url 'revoke_award' i.id %}">Revoke</a></span>{% endcomment %}
+                    </li>
+                </ul>
+            </p>
 			{% endfor %}
 			</div>
 		</div>

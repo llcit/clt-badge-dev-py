@@ -28,6 +28,7 @@
                 <span>
                     <a class="btn btn-xs btn-default" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">Detail</a>
                 </span>
+                <span><a class="btn btn-xs btn-danger" href="{% url 'revoke_award' i.id %}">revoke</a></span>
                 <span>{{ i.firstname }} {{ i.lastname }} <strong>{{ i.email }}</strong></span>
                 <ul id="detail_{{ i.id }}" class="list-group list-group-success collapse">
                     <li class="list-group-item"><strong>evidence: </strong> <a href="{{ i.evidence }}" target="_blank">{{ i.evidence }}</a></li>
