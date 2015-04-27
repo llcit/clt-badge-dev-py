@@ -10,6 +10,16 @@
     <div class="row">
         <div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
 
+        <div class="col-md-4" style="padding: 10px">
+            <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Create {{ object_type }} here:</div>
+            <div class="well" style="background: white">
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <button class="btn btn-lg btn-success" type="submit">Add {{ object_type }}</button>
+                </form>
+            </div>
+        </div>
+
         <div class="col-md-8" style="padding: 10px">
             <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing Awards </div>
 
@@ -35,6 +45,7 @@
                     <li class="list-group-item"><strong>issued: </strong> {{ i.issuedOn }}</li>
                     <li class="list-group-item"><strong>issued by: </strong> {{ i.creator }}</li>
                     <li class="list-group-item"><strong>last modified: </strong> {{ i.modified }}</li>
+                    <li class="list-group-item"><strong>expires: </strong> {{ i.expires }}</li>
                     <li class="list-group-item"><strong>assertion: </strong><a href="{{ i.jsonfile }}"
                      target="_blank">{{ i.jsonfile }}</a></li>
                     <li class="list-group-item"><strong>claim code: </strong> {{ i.claimCode }}</li>
@@ -51,17 +62,6 @@
 
         </div>
 
-
-
-        <div class="col-md-4" style="padding: 10px">
-            <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Create {{ object_type }}</div>
-            <div class="well" style="background: white">
-                <form method="post">{% csrf_token %}
-                    {{ form|crispy }}
-                    <button class="btn btn-lg btn-success" type="submit">Add {{ object_type }}</button>
-                </form>
-            </div>
-        </div>
     </div>
 
 {% endblock content_container %}

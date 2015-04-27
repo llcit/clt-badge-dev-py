@@ -1,4 +1,4 @@
-<!-- create_view.html -->
+<!-- badge_revoke_award_view.html -->
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags %}
@@ -6,36 +6,49 @@
 {% block page_header_container %}{% endblock page_header_container %}
 
 {% block content_container %}
+
 <!-- ROW 1 -->
-	<div class="row">
-		<div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
+<div class="row">
 
-		<div class="col-md-6 col-md-offset-3" style="padding: 10px">
-			<div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Revoke {{ object_type }}</div>
-			<div class="well">
-				<form method="post">{% csrf_token %}
-					{{ form|crispy }}
-					<button class="btn btn-lg btn-danger btn-block" type="submit">Revoke This Award?</button>
-				</form>
-			</div>
-		</div>
+    <div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
 
+	<div class="col-md-6 col-md-offset-3" style="padding: 10px">
+		<div class="lead" style="background-color: #E6E6E6">Revoke {{ award_to_revoke.badge }} for {{ award_to_revoke }}</div>
+        <div class="">
+            Revoking an award adds the award id to a revocation list. When a badge verify process (e.g. Mozilla Backpack) attempts to verify the award, it will report that the award has been revoked. No assertion files are deleted and the award info is retained in the database.
 
-        <div class="col-md-12" style="padding: 10px">
-            <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing Revocations </div>
-
-            {% for i in current_objects %}
-            <p>
-                <span><i class="fa fa-caret-right"></i> </span>
-                <span><strong>Badge: </strong>{{ i.award.badge }} {{ i.award }}</span>
-                <span><strong>Revoked: </strong> {{ i.revoke_date|date:"d M Y" }}</span>
-                <span><a class="btn btn-xs btn-default" href="{% url 'unrevoke_award' i.id %}">Unrevoke</a></span>
-
+            <h4><em>Revoking</em> an award is not the same as <em>deleting</em> an award:</h4>
+            <em>Deleting an award removes the award and its assertion file from the system. The award will not be recoverable unless from system backups. </em>
+            <p>If you would like to DELETE rather than REVOKE, click here:
+                <p><a href="{% url 'delete_award' award_to_revoke.id %}" class="btn btn-warning btn-xs">DELETE {{ award_to_revoke.badge }} for {{ award_to_revoke }}?</a> </p>
             </p>
-            {% endfor %}
-
         </div>
+		<div class="well">
+			<form method="post">{% csrf_token %}
+				{{ form|crispy }}
+				<button class="btn btn-lg btn-danger btn-block" type="submit">Revoke This Award?</button>
 
+                <h4><a href="{% url 'list_awards_by_badge' award_to_revoke.badge.id %}" class="btn btn-success btn-md">Do not revoke.</a></h4>
+			</form>
+		</div>
 	</div>
+
+
+    <div class="col-md-12" style="padding: 10px">
+        <div class="lead" style="background-color: #E6E6E6">{{ parent_object }}: Existing Revocations </div>
+
+        {% for i in current_objects %}
+        <p>
+            <span><i class="fa fa-caret-right"></i> </span>
+            <span><strong>Badge: </strong>{{ i.award.badge }} {{ i.award }}</span>
+            <span><strong>Revoked: </strong> {{ i.revoke_date|date:"d M Y" }}</span>
+            <span><a class="btn btn-xs btn-default" href="{% url 'unrevoke_award' i.id %}">Unrevoke</a></span>
+
+        </p>
+        {% endfor %}
+
+    </div>
+
+</div>
 
 {% endblock content_container %}

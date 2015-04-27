@@ -20,6 +20,8 @@ class CreateAwardForm(ModelForm):
     class Meta:
         model = Award
         fields = ['email', 'firstname', 'lastname', 'badge', 'creator', 'evidence', 'expires']
+        widgets = {'expires': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'datepicker'})}
+        help_texts = {'expires': 'Eg: 2015-01-01 for January 1, 2015'}
 
 
 class RevokeAwardForm(ModelForm):

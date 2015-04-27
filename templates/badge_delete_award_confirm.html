@@ -1,0 +1,32 @@
+<!-- badge_delete_award_confirm.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+
+<!-- ROW 1 -->
+<div class="col-md-6 col-md-offset-3" style="padding: 10px">
+    <div class="lead" style="background-color: #E6E6E6">Permanently DELETE award given to {{ object }}</div>
+
+    <div class="well">
+        <h4>This action will permanently remove the badge, <strong>{{ object.badge }}</strong> awarded to {{ object }}. This cannot be undone! </h4>
+        <form method="post">{% csrf_token %}
+            {{ form|crispy }}
+
+
+            <h6 class="well" style="background: orange">If you're not sure about this, you can instead <strong>revoke</strong> the award with less permanent consequences.
+                <a href="{% url 'revoke_award' object.id %}" class="btn btn-default btn-xs">revoke instead?</a>
+            </h6>
+
+            <button class="btn btn-lg btn-danger btn-block" type="submit">Yes, I want to permanently remove {{ object.badge }} awarded to {{ object }}.</button>
+
+            <h4><a href="{% url 'list_awards_by_badge' object.badge.id %}" class="btn btn-success btn-md">Do not delete</a></h4>
+        </form>
+    </div>
+
+</div>
+
+{% endblock content_container %}

@@ -38,7 +38,7 @@ class IndexView(StaffuserRequiredMixin, TemplateView):
             for j in i.badges.all().order_by('-created'):
                 badges.append(j)
                 years.add(j.created.strftime('%Y'))
-                print list(years)
+
             badges = sorted(badges, key=attrgetter('created'), reverse=True)
             issuer_list.append({'issuer': i, 'badges': badges})
 
@@ -247,7 +247,7 @@ class AwardUpdateView(StaffuserRequiredMixin, ClassNameMixin, UpdateView):
 
 class RevokedAwardListView(StaffuserRequiredMixin, ClassNameMixin, ListView):
     model = Revocation
-    template_name = 'badge_revocation_list_view.html'
+    template_name = 'badge_revoke_list_view.html'
     class_name = 'Award'
 
     def get_queryset(self):
@@ -293,18 +293,26 @@ class RevokeAwardView(StaffuserRequiredMixin, ClassNameMixin, CreateView):
         context = super(RevokeAwardView, self).get_context_data(**kwargs)
         context['form'].fields[
             'award'].label = '%s -- %s' % (self.award_to_revoke.badge, self.award_to_revoke)
-        context['current_objects'] = Revocation.objects.all().order_by(
+        context['current_objects'] = Revocation.objects.all().filter(award__badge=self.award_to_revoke.badge).order_by(
             'issuer')
         context['parent_object'] = 'Revocation'
+        context['award_to_revoke'] = self.award_to_revoke
         return context
 
 
 class UnRevokeAwardView(StaffuserRequiredMixin, DeleteView):
     model = Revocation
-    template_name = 'badge_generic_confirm_delete.html'
+    template_name = 'badge_unrevoke_award_confirm.html'
     success_url = None
 
     def get_success_url(self):
         return reverse_lazy('list_awards_by_badge', args=[self.get_object().award.badge.id])
 
 
+class DeleteAwardView(StaffuserRequiredMixin, DeleteView):
+    model = Award
+    template_name = 'badge_delete_award_confirm.html'
+    success_url = None
+
+    def get_success_url(self):
+        return reverse_lazy('list_awards_by_badge', args=[self.get_object().badge.id])

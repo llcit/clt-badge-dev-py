@@ -1,0 +1,28 @@
+<!-- badge_unrevoke_award_view.html -->
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block page_header_container %}{% endblock page_header_container %}
+
+{% block content_container %}
+
+<!-- ROW 1 -->
+<div class="row">
+
+    <div class="col-md-12"><a href="{% url 'badge_home' %}" class="btn btn-md btn-default" ><i class="fa fa-caret-left"></i> Badge Home</a> </div>
+
+    <div class="col-md-6 col-md-offset-3" style="padding: 10px">
+        <div class="lead" style="background-color: #E6E6E6">Reinstate Revoked {{ object.award.badge }} for {{ object.award }}</div>
+        <div class="well">
+            <form method="post">{% csrf_token %}
+                {{ form|crispy }}
+                <button class="btn btn-lg btn-danger btn-block" type="submit">Reinstate this award?</button>
+
+                <h4><a href="{% url 'list_awards_by_badge' object.award.badge.id %}" class="btn btn-success btn-md">Do not reinstate.</a></h4>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock content_container %}

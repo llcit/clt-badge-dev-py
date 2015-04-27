@@ -5,7 +5,7 @@ from badge_site.views import (
     HomeView, IndexView, BadgeClaimView, BadgeClaimCodeView, SendAwardNotificationView,
     IssuerCreateView, IssuerUpdateView, IssuerListView,
     BadgeCreateView, BadgeUpdateView, BadgeListView,
-    AwardCreateView, AwardUpdateView, AwardListView, RevokeAwardView, UnRevokeAwardView, RevokedAwardListView
+    AwardCreateView, AwardUpdateView, AwardListView, RevokeAwardView, UnRevokeAwardView, RevokedAwardListView, DeleteAwardView
 )
 
 urlpatterns = patterns('',
@@ -21,7 +21,7 @@ urlpatterns = patterns('',
 
     url(r'^award/add/(?P<badge>\d+)/$', AwardCreateView.as_view(), name='create_award_by_badge'),
     url(r'^award/edit/(?P<pk>\d+)/$', AwardUpdateView.as_view(), name='edit_award'),
-    # url(r'^award/delete/(?P<pk>\d+)/$', DeleteAwardView.as_view(), name='delete_award'),
+    url(r'^award/delete/(?P<pk>\d+)/$', DeleteAwardView.as_view(), name='delete_award'),
 
     url(r'^award/revoke/(?P<award_to_revoke>\d+)/$', RevokeAwardView.as_view(), name='revoke_award'),
     url(r'^award/unrevoke/(?P<pk>\d+)/$', UnRevokeAwardView.as_view(), name='unrevoke_award'),

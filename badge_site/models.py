@@ -73,6 +73,7 @@ class Issuer(models.Model):
         try:
             f = open(self.getRevokeAssertionPath(), 'w')
             localFile = File(f)
+            print 'deleting ', localFile.name
             if os.path.isfile(localFile.name):
                 os.remove(localFile.name)
             f.closed
@@ -288,6 +289,12 @@ class Award(models.Model):
         super(Award, self).save(*args, **kwargs)  # Call the "real" save()
         self.writeAssertionFile()
 
+    def delete(self, *args, **kwargs):
+        super(Award, self).delete(*args, **kwargs)  # Call the "real" delete()
+
+        # The db award object has been deleted. Now remove the associated assertion file.
+        self.deleteAssertionFile()
+
     def __unicode__(self):
         return self.email
 
@@ -306,6 +313,14 @@ class Revocation(models.Model):
         # Update the revocation list (file) for the related issuer
         if self.issuer.revocationfile:
             self.issuer.writeRevokeAssertionFile()
+
+    def delete(self, *args, **kwargs):
+        super(Revocation, self).delete(*args, **kwargs)  # Call the "real" delete()
+
+        # Update the revocation list (file) for the related issuer
+        if self.issuer.revocationfile:
+            self.issuer.writeRevokeAssertionFile()
+
 
     def __unicode__(self):
         return '%s %s %s %s' % (self.issuer, self.award.badge, self.award, self.revoke_date)

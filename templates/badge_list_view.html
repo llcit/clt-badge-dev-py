@@ -19,7 +19,7 @@
             <div>
                 {% if badge %}
                     {{ object_list|length }} badges awarded (see
-                    <span class="smaller"><a class="" href="{% url 'list_revoked_awards' badge.id %}">revoked awards</a> </span>)
+                    <span class="smaller"><a class="" href="{% url 'list_revoked_awards' badge.id %}">view revoked awards</a> </span>)
                 {% endif %}
                 <br><br>
             </div>
@@ -30,17 +30,18 @@
                 <span><i class="fa fa-caret-right"></i> </span>
 
                 <span>{{ i.issuedOn|date:"d M Y" }}</span>
-                <span><a class="btn btn-xs btn-default" href="{% url 'edit_award' i.id %}">Edit</a></span>
-                <span>
-                    {% if not i.notification_status %}
-                        <a class="btn btn-xs btn-success" href="{% url 'send_award_email' i.id %}">Send Email</a>
-                    {% endif %}
-                </span>
-
-                <span>
-                    <a class="btn btn-xs btn-default" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">Detail</a>
-                </span>
                 {% if not i.revoked %}
+                    <span><a class="btn btn-xs btn-default" href="{% url 'edit_award' i.id %}">Edit</a></span>
+                    <span>
+                        {% if not i.notification_status %}
+                            <a class="btn btn-xs btn-success" href="{% url 'send_award_email' i.id %}">Send Email</a>
+                        {% endif %}
+                    </span>
+
+                    <span>
+                        <a class="btn btn-xs btn-default" data-toggle="collapse" href="#detail_{{ i.id }}" aria-expanded="false" aria-controls="detail_{{ i.id }}">Detail</a>
+                    </span>
+
                     <span><a class="btn btn-xs btn-danger" href="{% url 'revoke_award' i.id %}">revoke</a></span>
                 {% else %}
                     <span class="label label-warning">Award revoked</span>
