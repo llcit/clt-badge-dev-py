@@ -33,10 +33,14 @@ class Issuer(models.Model):
     image = models.CharField(max_length=128)
     contact = models.CharField(max_length=128)
     jsonfile = models.URLField(max_length=1024, blank=True)
+    jsonfile_name = models.CharField(max_length=512, blank=True, null=True)
     revocationfile = models.CharField(max_length=512, null=True, blank=True)
 
     def getJsonFilename(self):
-        return 'issuer-assert-' + self.guid + '.json'
+        if not self.jsonfile_name:
+            self.jsonfile_name = 'issuer-assert-' + self.guid + '.json'
+            self.save()
+        return self.jsonfile_name
 
     def getIssuerUrl(self):
         return os.path.join(self.url, settings.ISSUER_REPO, self.getJsonFilename())
@@ -129,13 +133,17 @@ class Badge(models.Model):
     criteria = models.URLField()
     issuer = models.ForeignKey(Issuer, related_name='badges')
     created = models.DateField(auto_now=True, blank=False)
+    jsonfile_name = models.CharField(max_length=512, blank=True, null=True)
     jsonfile = models.URLField(max_length=1024, blank=True)
     notify_email_message = models.TextField(blank=True, default='')
     notify_email_subject = models.CharField(
         max_length=256, blank=True, default='')
 
     def getJsonFilename(self):
-        return 'badge-assert-' + self.guid + '.json'
+        if not self.jsonfile_name:
+            self.jsonfile_name = 'badge-assert-' + self.guid + '.json'
+            self.save()
+        return self.jsonfile_name
 
     def getBadgeUrl(self):
         return os.path.join(self.issuer.url, settings.BADGES_REPO, self.getJsonFilename())
@@ -214,6 +222,7 @@ class Award(models.Model):
                                  help_text="This is auto generated. Send this to recipient so they may claim their badge.")
     salt = models.CharField(
         max_length=10, blank=True, help_text="This is auto generated.")
+    jsonfile_name = models.CharField(max_length=512, blank=True, null=True)
     jsonfile = models.URLField(max_length=1024, blank=True,
                                help_text="This is auto generated but is fully qualified url for the award assertion.")
     expires = models.DateField(null=True, blank=True)
@@ -223,7 +232,10 @@ class Award(models.Model):
         unique_together = ('email', 'badge')
 
     def getJsonFilename(self):
-        return 'award-assert-' + self.guid + '.json'
+        if not self.jsonfile_name:
+            self.jsonfile_name = 'award-assert-' + self.guid + '.json'
+            self.save()
+        return self.jsonfile_name
 
     def getAssertionUrl(self):
         return os.path.join(self.badge.issuer.url, settings.AWARDS_REPO, self.getJsonFilename())

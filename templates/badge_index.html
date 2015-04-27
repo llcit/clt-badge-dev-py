@@ -33,7 +33,8 @@
 								<li class="list-group-item list-group-item-success"><strong>url: </strong><a href="{{ i.issuer.url }}" target="_blank">{{ i.issuer.url }}</a></li>
 								<li class="list-group-item list-group-item-success"><strong>document root: </strong>{{ i.issuer.doc_path }} </li>
 								<li class="list-group-item list-group-item-success"><strong>contact: </strong>{{ i.issuer.contact }}</li>
-								<li class="list-group-item list-group-item-success"><strong>assertion: </strong><a href="{{ i.issuer.jsonfile }}" target="_blank">{{ i.issuer.jsonfile }}</a></li>
+								<li class="list-group-item list-group-item-success"><strong>json file name: </strong>{{ i.issuer.jsonfile_name }}</li>
+                                <li class="list-group-item list-group-item-success"><strong>assertion: </strong><a href="{{ i.issuer.jsonfile }}" target="_blank">{{ i.issuer.jsonfile }}</a></li>
                                 <li class="list-group-item list-group-item-success"><strong>revoked list assertion url: </strong><a href="{{ i.issuer.getRevokeAssertionUrl }}" target="_blank">{{ i.issuer.getRevokeAssertionUrl }}</a></li>
 							</ul>
                         </p>
