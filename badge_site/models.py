@@ -132,7 +132,7 @@ class Badge(models.Model):
     description = models.CharField(max_length=128)
     criteria = models.URLField()
     issuer = models.ForeignKey(Issuer, related_name='badges')
-    created = models.DateField(auto_now=True, blank=False)
+    created = models.DateField(auto_now_add=True, blank=False)
     jsonfile_name = models.CharField(max_length=512, blank=True, null=True)
     jsonfile = models.URLField(max_length=1024, blank=True)
     notify_email_message = models.TextField(blank=True, default='')
