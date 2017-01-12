@@ -19,6 +19,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_cas_ng',
+    #'uhauth',
     'crispy_forms',
     'braces',
     'badge_site',
@@ -33,6 +35,18 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+
+# CAS
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'django_cas_ng.backends.CASBackend',
+)
+# set CAS SERVER FIRST
+CAS_SERVER_URL = ''
+# set CAS VERSION: default is CAS2
+CAS_VERSION = 'CAS_2_SAML_1_0'
+# set redirection after login
+CAS_REDIRECT_URL = ''
 
 ROOT_URLCONF = 'badgeproject.urls'
 
@@ -72,4 +86,3 @@ ISSUER_REPO = 'badge-docs/issuer'
 BADGES_REPO = 'badge-docs/badges'
 AWARDS_REPO = 'badge-docs/earned'
 REVOKE_REPO = 'badge-docs/revoke'
-
