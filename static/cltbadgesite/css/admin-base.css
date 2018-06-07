@@ -1,0 +1,51 @@
+/*
+    DJANGO Admin styles
+*/
+
+
+
+/* HEADER */
+.Nexa-Book { 
+    font-family: Nexa-Book;
+    font-weight: normal;
+    font-style: normal;
+}
+
+#header {
+    background: #fff;
+    color: #000;
+    overflow: hidden;
+}
+
+#header a:link, #header a:visited {
+    color: black;
+}
+
+#header a:hover {
+    text-decoration: underline;
+}
+
+#branding {
+    font-family: Nexa-Book;
+}
+
+#branding h1 {
+    padding: 0px 10px;
+    font-size: 18px;
+    margin: 8px 0;
+    font-weight: normal;
+    color: #000;
+}
+
+#branding h2 {
+    padding: 10px 10px;
+    font-size: 1.5em;
+    margin: -8px 0 8px 5px;
+    font-weight: normal;
+    color: #5c89ae;
+}
+
+#branding div {
+    margin-left: 5px;
+}
+

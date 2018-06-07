@@ -1,0 +1,57 @@
+[site]
+SITE_ROOT:
+SITE_NAME:
+SITE_HOST:
+DOC_ROOT:
+
+[hosts]
+HOST1: localhost
+
+[database]
+DATABASE_USER:
+DATABASE_PASSWORD:
+DATABASE_HOST: localhost
+DATABASE_PORT:
+DATABASE_ENGINE: django.db.backends.mysql
+DATABASE_NAME:
+TESTSUITE_DATABASE_NAME:
+
+[secrets]
+SECRET_KEY
+CSRF_MIDDLEWARE_SECRET:
+
+[cookies]
+SESSION_COOKIE_DOMAIN:
+
+# all settings in debug section should be false in productive environment
+# INTERNAL_IPS should be empty in productive environment
+[debug]
+DEBUG: True
+TEMPLATE_DEBUG: True
+VIEW_TEST: True
+INTERNAL_IPS: 127.0.0.1
+SKIP_CSRF_MIDDLEWARE: True
+
+[email]
+SERVER_EMAIL: admin@localhost
+EMAIL_HOST: localhost
+
+# the [error mail] and [404 mail] sections are special. Just add lines with
+#  full name: admin
+# each section must be present but may be empty.
+[error mail]
+Adam Smith: admin@localhost
+
+[404 mail]
+John Wayne: admin@localhost
+
+[static_root]
+STATIC_ROOT: /files/web/static/
+MEDIA_ROOT: /files/web/smedia/
+
+[cas]
+LOGIN_REDIRECT_URL:
+LOGIN_URL:
+CAS_SERVER_URL:
+CAS_REDIRECT_URL: 
+CAS_VERSION: CAS_2_SAML_1_0

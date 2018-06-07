@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import  include, url
 from django.contrib import admin
+from django_cas_ng import views as cas_views
 
 from badge_site.views import (
     HomeView, IndexView, BadgeClaimView, BadgeClaimCodeView, SendAwardNotificationView,
@@ -8,7 +9,7 @@ from badge_site.views import (
     AwardCreateView, AwardUpdateView, AwardListView, RevokeAwardView, UnRevokeAwardView, RevokedAwardListView, DeleteAwardView
 )
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^$', HomeView.as_view(), name='home'),
     url(r'^badgemaster/$', IndexView.as_view(), name='badge_home'),
     url(r'^issuer/add/$', IssuerCreateView.as_view(), name='create_issuer'),
@@ -35,6 +36,9 @@ urlpatterns = patterns('',
     url(r'^notify/(?P<pk>\d+)/$', SendAwardNotificationView.as_view(), name='send_award_email'),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
-)
+#    url(r'^accounts/login/$', 'django.contrib.auth.views.login', name='login'),
+#    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
+    url(r'^accounts/login/$', cas_views.login, name='login'),
+    url(r'^logout/$', cas_views.logout, name='logout'),
+    url(r'^accounts/callback$', cas_views.callback, name='cas_ng_proxy_callback'),
+]

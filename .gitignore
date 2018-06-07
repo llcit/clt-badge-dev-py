@@ -42,4 +42,6 @@ prod-wsgi.py
 prod-*.py
 cltbadgedb
 
-
+*.conf
+.*project
+.envrc

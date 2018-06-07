@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/files/pythonapps/cltbadges_env/bin/python
 import os
 import sys
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "badgeproject.settings")
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "badgeproject.settings.base")
 
     from django.core.management import execute_from_command_line
 

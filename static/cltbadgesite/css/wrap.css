@@ -1,0 +1,102 @@
+/*GLOBALS*/
+.Nexa-Book { 
+	font-family: Nexa-Book;
+	font-weight: normal;
+	font-style: normal;
+}
+
+* {
+	font-family: Nexa-Book;	
+	font-size: 1.0em;
+}
+
+a, a:visited { 
+	text-decoration:none;
+	color: #5c89ae;
+}
+
+a:hover { 
+	color: #333333;
+	text-decoration: underline;
+}
+
+/*TOP LEVEL WRAPS*/
+div#wrapper {}
+
+div#pagewrap {}
+
+/*HEADER*/
+div#headerwrap { text-align: center; }
+
+div.acct-strip {
+	font-size: 0.7em;
+	float: right;
+}
+
+@media (max-width: 1010px) {
+	div#headerwrap img { width: 100%; }
+}
+
+@media (min-width: 1011px) {
+	div#headerwrap img { width: 864px; }
+}
+
+/*SUBHEADER - submenu*/
+div#subheaderwrap {
+	height: 2.5em;
+	background: #5c89ae;
+	color: #fff;
+	font-size: 0.8em;
+}
+
+/*CONTENT*/
+div#contentwrap {
+	background: #fff;
+}
+
+
+/*FOOTER*/
+div#footer {   	
+	text-align: center;
+	font-weight: 350;
+	font-size: 0.8em;
+}
+
+.border-top {
+	border-top: 1px solid #333;
+	color: #333;	
+}
+
+
+/*Display Debugging*/
+.border-full {
+	border: 1px solid #333;
+	color: #333;	
+}
+
+
+
+
+
+/*TEXTS*/
+
+.subtext {
+	font-size: 0.5em;
+}
+
+.medtext {
+	font-size: 1.5em;
+}
+
+.white-text {
+	color: #ffffff;
+	opacity: 1.0;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+
+
+

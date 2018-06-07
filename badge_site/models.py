@@ -20,7 +20,6 @@ from .utils import hashEmailAddress, genGuid
 def getRandomString(size=12, chars=string.ascii_uppercase + string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
-
 class Issuer(models.Model):
     # Issuing organization (e.g. CLT, NFLRC, etc.)
     guid = models.CharField(
@@ -77,7 +76,7 @@ class Issuer(models.Model):
         try:
             f = open(self.getRevokeAssertionPath(), 'w')
             localFile = File(f)
-            print 'deleting ', localFile.name
+            print ('deleting ', localFile.name)
             if os.path.isfile(localFile.name):
                 os.remove(localFile.name)
             f.closed
@@ -121,7 +120,7 @@ class Issuer(models.Model):
         super(Issuer, self).save(*args, **kwargs)  # Call the "real" save()
         self.writeIssuerFile()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
 
@@ -191,7 +190,7 @@ class Badge(models.Model):
         super(Badge, self).save(*args, **kwargs)  # Call the "real" save()
         self.writeBadgeFile()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     class Meta:
@@ -307,7 +306,7 @@ class Award(models.Model):
         # The db award object has been deleted. Now remove the associated assertion file.
         self.deleteAssertionFile()
 
-    def __unicode__(self):
+    def __str__(self):
         return self.email
 
 
@@ -315,7 +314,7 @@ class Revocation(models.Model):
 
     """ models a revocation list associated with an issuer object """
     issuer = models.ForeignKey(Issuer, related_name='revocations')
-    award = models.ForeignKey(Award, unique=True)
+    award = models.OneToOneField(Award)
     reason = models.CharField(max_length=512, null=False)
     revoke_date = models.DateField(auto_now=True, blank=False)
 
@@ -334,5 +333,5 @@ class Revocation(models.Model):
             self.issuer.writeRevokeAssertionFile()
 
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s %s %s %s' % (self.issuer, self.award.badge, self.award, self.revoke_date)
