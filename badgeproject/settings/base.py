@@ -33,12 +33,15 @@ ALLOWED_HOSTS = [config.get('hosts', 'HOST1'),]
 SITE_ROOT = config.get('site', 'SITE_ROOT')
 SITE_HOST = config.get('site', 'SITE_HOST')
 
+SITE_ID = 1
+
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
@@ -72,6 +75,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                
+                # Added to allow access to SITE_ROOT parameter in templates
+                'badgeproject.context_processors.site_root',
             ],
         },
     },
