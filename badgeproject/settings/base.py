@@ -33,15 +33,12 @@ ALLOWED_HOSTS = [config.get('hosts', 'HOST1'),]
 SITE_ROOT = config.get('site', 'SITE_ROOT')
 SITE_HOST = config.get('site', 'SITE_HOST')
 
-SITE_ID = 1
-
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sites',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',

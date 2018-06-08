@@ -41,7 +41,7 @@ Thumbs.db
 prod-wsgi.py
 prod-*.py
 cltbadgedb
-
+cltbadgedb_old
 *.conf
 .*project
 .envrc
